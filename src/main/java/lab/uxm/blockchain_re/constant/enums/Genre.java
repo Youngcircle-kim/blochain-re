@@ -1,5 +1,8 @@
 package lab.uxm.blockchain_re.constant.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum Genre {
   All("all", "0") ,
   RAndB("R&B", "1"),

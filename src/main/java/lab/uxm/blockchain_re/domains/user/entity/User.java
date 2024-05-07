@@ -18,13 +18,18 @@ import lab.uxm.blockchain_re.domains.music.entity.Music;
 import lab.uxm.blockchain_re.domains.nft.entity.NFT;
 import lab.uxm.blockchain_re.domains.purchase.entity.Purchase;
 import lab.uxm.blockchain_re.domains.user_nft.entity.UserNFT;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @Table(name = "user")
 @Getter
 @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 
   @Id
@@ -62,4 +67,18 @@ public class User {
 
   @OneToMany(mappedBy = "user")
   private List<UserNFT> userNfts = new ArrayList<>();
+  @Builder
+  public User(String name, String email, Type type, String password, String nickname,
+      String wallet) {
+    this.name = name;
+    this.email = email;
+    this.type = type;
+    this.password = password;
+    this.nickname = nickname;
+    this.wallet = wallet;
+  }
+
+  public void encodePassword(PasswordEncoder passwordEncoder){
+    this.password = passwordEncoder.encode(this.password);
+  }
 }

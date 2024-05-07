@@ -3,6 +3,7 @@ package lab.uxm.blockchain_re.domains.user.service;
 import java.util.Optional;
 import lab.uxm.blockchain_re.domains.user.dto.CustomUserInfoDto;
 import lab.uxm.blockchain_re.domains.user.dto.LoginRequestDto;
+import lab.uxm.blockchain_re.domains.user.dto.SignUpRequestDto;
 import lab.uxm.blockchain_re.domains.user.entity.User;
 import lab.uxm.blockchain_re.domains.user.repository.UserRepository;
 import lab.uxm.blockchain_re.utils.JwtUtil;
@@ -36,5 +37,19 @@ public class AuthServiceImpl implements AuthService{
     CustomUserInfoDto info = modelMapper.map(user, CustomUserInfoDto.class);
 
     return jwtUtil.createAccessToken(info);
+  }
+
+  @Override
+  public long join(SignUpRequestDto dto) {
+    String email = dto.getEmail();
+    Optional<User> user = userRepository.findUserByEmail(email);
+
+    if (user.isPresent()){
+      throw new IllegalArgumentException("이미 존재하는 유저입니다.");
+    }
+    User newUser = SignUpRequestDto.toEntity(dto);
+    newUser.encodePassword(encoder);
+    User savedUser = userRepository.save(newUser);
+    return savedUser.getId();
   }
 }

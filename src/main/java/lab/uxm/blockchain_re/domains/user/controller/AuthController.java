@@ -2,6 +2,7 @@ package lab.uxm.blockchain_re.domains.user.controller;
 
 import jakarta.validation.Valid;
 import lab.uxm.blockchain_re.domains.user.dto.LoginRequestDto;
+import lab.uxm.blockchain_re.domains.user.dto.SignUpRequestDto;
 import lab.uxm.blockchain_re.domains.user.message.AuthResponseMessage;
 import lab.uxm.blockchain_re.domains.user.service.AuthService;
 import lab.uxm.blockchain_re.response.ResponseData;
@@ -21,14 +22,26 @@ public class AuthController {
   private final AuthService authService;
 
 
-  @PostMapping("signin")
-  public ResponseEntity postSignIn(
+  @PostMapping("/signin")
+  public ResponseEntity<Object> postSignIn(
       @Valid @RequestBody LoginRequestDto req
   ){
     String token = this.authService.signIn(req);
     return new ResponseEntity(
         ResponseData
             .res(StatusCode.OK, AuthResponseMessage.SIGN_IN_SUCCESS, token),
+        HttpStatus.OK
+    );
+  }
+
+  @PostMapping("/signup")
+  public ResponseEntity<Object> postSignUp(
+      @Valid @RequestBody SignUpRequestDto req
+  ){
+    long id = this.authService.join(req);
+    return new ResponseEntity(
+      ResponseData
+          .res(StatusCode.OK, AuthResponseMessage.SIGN_UP_SUCCESS, id),
         HttpStatus.OK
     );
   }

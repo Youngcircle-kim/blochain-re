@@ -11,7 +11,7 @@ import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.sql.Date;
 import java.time.ZonedDateTime;
-import lab.uxm.blockchain_re.domains.user.dto.CustomUserInfoDto;
+import lab.uxm.blockchain_re.domains.user.dto.auth.CustomUserInfoDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

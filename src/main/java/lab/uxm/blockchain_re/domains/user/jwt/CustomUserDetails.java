@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-import lab.uxm.blockchain_re.domains.user.dto.CustomUserInfoDto;
+import lab.uxm.blockchain_re.domains.user.dto.auth.CustomUserInfoDto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

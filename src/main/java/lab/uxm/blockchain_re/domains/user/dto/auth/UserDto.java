@@ -1,4 +1,4 @@
-package lab.uxm.blockchain_re.domains.user.dto;
+package lab.uxm.blockchain_re.domains.user.dto.auth;
 
 import lab.uxm.blockchain_re.constant.enums.Type;
 import lombok.AllArgsConstructor;

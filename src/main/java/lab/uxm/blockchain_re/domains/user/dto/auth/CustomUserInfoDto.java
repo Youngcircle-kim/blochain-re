@@ -1,4 +1,4 @@
-package lab.uxm.blockchain_re.domains.user.dto;
+package lab.uxm.blockchain_re.domains.user.dto.auth;
 
 import lab.uxm.blockchain_re.constant.enums.Type;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CustomUserInfoDto extends UserDto{
+public class CustomUserInfoDto extends UserDto {
   private Long id;
 
   private String email;

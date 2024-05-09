@@ -1,6 +1,6 @@
 package lab.uxm.blockchain_re.domains.user.jwt;
 
-import lab.uxm.blockchain_re.domains.user.dto.CustomUserInfoDto;
+import lab.uxm.blockchain_re.domains.user.dto.auth.CustomUserInfoDto;
 import lab.uxm.blockchain_re.domains.user.entity.User;
 import lab.uxm.blockchain_re.domains.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

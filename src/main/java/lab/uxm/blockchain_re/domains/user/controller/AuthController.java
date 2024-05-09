@@ -1,8 +1,8 @@
 package lab.uxm.blockchain_re.domains.user.controller;
 
 import jakarta.validation.Valid;
-import lab.uxm.blockchain_re.domains.user.dto.LoginRequestDto;
-import lab.uxm.blockchain_re.domains.user.dto.SignUpRequestDto;
+import lab.uxm.blockchain_re.domains.user.dto.auth.LoginRequestDto;
+import lab.uxm.blockchain_re.domains.user.dto.auth.SignUpRequestDto;
 import lab.uxm.blockchain_re.domains.user.message.AuthResponseMessage;
 import lab.uxm.blockchain_re.domains.user.service.AuthService;
 import lab.uxm.blockchain_re.response.ResponseData;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/auth")
+@RequestMapping("${api.prefix}/auth")
 public class AuthController {
   private final AuthService authService;
 

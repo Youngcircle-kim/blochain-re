@@ -8,6 +8,7 @@ import lab.uxm.blockchain_re.response.ResponseData;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -75,6 +76,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       errorResponseDto.addValidationError(fieldError.getField(), fieldError.getDefaultMessage());
     }
     return ResponseEntity.unprocessableEntity().body(errorResponseDto);
+  }
+  @ExceptionHandler(NotFoundException.class)
+  @Hidden
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ResponseEntity<Object> handleNotFoundException(
+      NotFoundException ex,
+      WebRequest req
+  ){
+    log.error(ex.getMessage());
+    return buildErrorResponse(ex, ex.getMessage(), HttpStatus.BAD_REQUEST, req);
   }
 
   @ExceptionHandler(UsernameNotFoundException.class)

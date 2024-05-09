@@ -17,6 +17,7 @@ import lab.uxm.blockchain_re.constant.enums.Type;
 import lab.uxm.blockchain_re.domains.music.entity.Music;
 import lab.uxm.blockchain_re.domains.nft.entity.NFT;
 import lab.uxm.blockchain_re.domains.purchase.entity.Purchase;
+import lab.uxm.blockchain_re.domains.user.dto.user.UserInfoUpdateRequestDto;
 import lab.uxm.blockchain_re.domains.user_nft.entity.UserNFT;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -78,7 +79,13 @@ public class User {
     this.wallet = wallet;
   }
 
-  public void encodePassword(PasswordEncoder passwordEncoder){
-    this.password = passwordEncoder.encode(this.password);
+  public void encodePassword(String password,PasswordEncoder passwordEncoder){
+    this.password = passwordEncoder.encode(password);
+  }
+
+  public void modifyInfo(UserInfoUpdateRequestDto dto, PasswordEncoder passwordEncoder){
+    this.name = dto.getName();
+    this.nickname = dto.getNickname();
+    encodePassword(dto.getPassword(), passwordEncoder);
   }
 }

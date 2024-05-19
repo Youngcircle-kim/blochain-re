@@ -1,6 +1,5 @@
 package lab.uxm.blockchain_re.utils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.ipfs.api.IPFS;
 import io.ipfs.api.MerkleNode;
@@ -11,7 +10,6 @@ import java.io.IOException;
 import lab.uxm.blockchain_re.domains.music.model.MusicMetadata;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -34,8 +32,8 @@ public class IPFSUtil {
    * @Param cid1
    * @Return fileContent byte[]
    * */
-  public byte[] retrieveFile(String cid1) throws IOException {
-    Multihash multihash = Multihash.fromBase58(cid1);
+  public byte[] retrieveFile(String cid) throws IOException {
+    Multihash multihash = Multihash.fromBase58(cid);
     return ipfs.cat(multihash);
   }
 
@@ -65,4 +63,8 @@ public class IPFSUtil {
     MerkleNode metadataCid = ipfs.add(file).get(0);
     return metadataCid.hash.toBase58();
   }
+  /**
+   * Retrieve
+   *
+   * */
 }

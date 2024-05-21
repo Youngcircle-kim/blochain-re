@@ -1,6 +1,5 @@
 package lab.uxm.blockchain_re.domains.music.dto.music;
 
-import java.util.List;
 import lab.uxm.blockchain_re.domains.music.entity.Music;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -20,7 +20,7 @@ public class Web3jConfig {
   private String PRIVATE_KEY;
 
   @Bean
-  public Web3j web3j() {
+  public Web3j Web3j() {
     return Web3j.build(new HttpService(INFURA_API_URL));
   }
 

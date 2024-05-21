@@ -3,8 +3,6 @@ package lab.uxm.blockchain_re.domains.music.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,14 +18,17 @@ import lab.uxm.blockchain_re.constant.enums.Genre;
 import lab.uxm.blockchain_re.domains.nft.entity.NFT;
 import lab.uxm.blockchain_re.domains.purchase.entity.Purchase;
 import lab.uxm.blockchain_re.domains.user.entity.User;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "music")
 @Getter
 @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Music {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

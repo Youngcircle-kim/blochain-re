@@ -20,6 +20,7 @@ import lab.uxm.blockchain_re.constant.enums.Genre;
 import lab.uxm.blockchain_re.domains.nft.entity.NFT;
 import lab.uxm.blockchain_re.domains.purchase.entity.Purchase;
 import lab.uxm.blockchain_re.domains.user.entity.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -67,5 +68,26 @@ public class Music {
 
   @OneToMany(mappedBy = "music")
   private List<Purchase> purchases = new ArrayList<>();
-
+  @Builder()
+  public Music(
+      String title,
+      String artist,
+      String cid1,
+      String cid2,
+      String cid3,
+      String sha1,
+      String address1,
+      Genre genre,
+      User user
+  ){
+    this.title = title;
+    this.artist = artist;
+    this.cid1 = cid1;
+    this.cid2 = cid2;
+    this.cid3 = cid3;
+    this.sha1 = sha1;
+    this.address1 = address1;
+    this.genre = genre;
+    this.user = user;
+  }
 }

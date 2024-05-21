@@ -39,7 +39,7 @@ public class UserController {
     @Valid @RequestBody UserInfoUpdateRequestDto dto
   ){
     UserUpdateDto userUpdateDto = this.userService.updateUserInfo(dto);
-    return new ResponseEntity<>(
+    return new ResponseEntity(
         ResponseData.res(HttpStatus.OK.value(),
             UserResponseMessage.UPDATING_USER_INFO_SUCCESS,
             userUpdateDto),

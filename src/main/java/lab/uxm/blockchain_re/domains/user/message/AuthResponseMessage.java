@@ -6,4 +6,6 @@ public class AuthResponseMessage {
   public static final String SIGN_UP_SUCCESS = "회원가입 성공";
   public static final String SIGN_UP_FAIL = "회원가입 실패";
   public static final String ALREADY_USER = "이미 존재하는 유저입니다.";
+
+  public static final String NO_GRANT_USER = "권한이 없는 유저입니다.";
 }

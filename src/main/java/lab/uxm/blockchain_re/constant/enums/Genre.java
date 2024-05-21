@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum Genre {
-  All("all", "0") ,
+  All("All", "0") ,
   RAndB("R&B", "1"),
   HipHop("Hip-Hop", "2"),
   Ballad("Ballad", "3"),

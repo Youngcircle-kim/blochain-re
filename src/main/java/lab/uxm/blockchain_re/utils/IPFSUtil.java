@@ -7,16 +7,19 @@ import io.ipfs.api.NamedStreamable;
 import io.ipfs.api.NamedStreamable.ByteArrayWrapper;
 import io.ipfs.multihash.Multihash;
 import jakarta.xml.bind.DatatypeConverter;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import lab.uxm.blockchain_re.domains.music.entity.Music;
 import lab.uxm.blockchain_re.domains.music.model.MusicMetadata;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -91,11 +94,24 @@ public class IPFSUtil {
    * @Param MusicMetadata
    * @Return cid String
    * */
-  public String addMetadataFileOnIPFS(MusicMetadata musicMetadata) throws IOException {
+  public String addMetadataFileOnIPFS(Object musicMetadata) throws IOException {
     String metadata = objectMapper.writeValueAsString(musicMetadata);
     NamedStreamable.ByteArrayWrapper file = new ByteArrayWrapper(metadata.getBytes());
     MerkleNode metadataCid = ipfs.add(file).get(0);
     return metadataCid.hash.toBase58();
+  }
+  public byte[] downloadFile(Music music) throws Exception {
+    byte[] bytes = this.ipfs.cat(Multihash.fromBase58(music.getCid3()));
+    byte[] decrypted = encryptAES(bytes);
+    GZIPInputStream gzipInputStream = new GZIPInputStream(new ByteArrayInputStream(decrypted));
+    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+    byte[] buffer = new byte[1024];
+    int len;
+    while((len = gzipInputStream.read(buffer)) >0){
+      byteArrayOutputStream.write(buffer, 0, len);
+    }
+    return byteArrayOutputStream.toByteArray();
   }
   public byte[] encryptAES(byte[] gzipped)
       throws Exception {

@@ -38,4 +38,13 @@ public class JSONUtil {
   public JSONArray getJSONArrayFromSuperJSON(JSONObject superJsonObject, String attr){
     return superJsonObject.getJSONArray(attr);
   }
+  /**
+   * This method get String object from super JSON object
+   * @param superJsonObject JSONObject
+   * @param attr String
+   * @return String
+   * */
+  public String getStringFromJSON(JSONObject superJsonObject, String attr){
+    return superJsonObject.getString(attr);
+  }
 }

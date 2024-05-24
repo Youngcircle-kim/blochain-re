@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService{
     return SearchUserInfoDto.from(user);
   }
 
-  private long getUserId(){
+  public long getUserId(){
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     return Long.parseLong(authentication.getName());
   }

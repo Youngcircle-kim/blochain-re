@@ -26,6 +26,7 @@ import lab.uxm.blockchain_re.domains.user.entity.User;
 import lab.uxm.blockchain_re.domains.user.message.AuthResponseMessage;
 import lab.uxm.blockchain_re.domains.user.message.UserResponseMessage;
 import lab.uxm.blockchain_re.domains.user.repository.UserRepository;
+import lab.uxm.blockchain_re.domains.user.service.UserServiceImpl;
 import lab.uxm.blockchain_re.provider.Web3jContractProvider;
 import lab.uxm.blockchain_re.utils.IPFSUtil;
 import lab.uxm.blockchain_re.utils.JSONUtil;
@@ -34,8 +35,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
@@ -51,10 +50,11 @@ public class UploadServiceImpl implements UploadService{
   private final IPFSUtil ipfsUtil;
   private final JSONUtil jsonUtil;
   private final Web3jContractProvider web3jContractProvider;
+  private final UserServiceImpl userService;
 
   @Override
   public List<RetrieveMusicInfoResponseDto> retrieveMusicInfo() throws IOException {
-    long userId = getUserId();
+    long userId = this.userService.getUserId();
     List<Music> musics = this.musicRepository.findAllByUser_id(userId);
 
     List<RetrieveMusicInfoResponseDto> retrieveMusicInfoResponses = musics.stream().map(
@@ -62,11 +62,6 @@ public class UploadServiceImpl implements UploadService{
     ).toList();
 
     for (int i = 0; i < musics.size(); i++){
-      /**
-       * 1. cid3 -> ipfs 상 이미지 찾고 base64 인코딩
-       * 2. cid1 -> 메타데이터 파일 찾고, 앨범 명만 get
-       * 3. 이미지 dto image, 앨범명은 dto album
-       * */
       // get image file
       byte[] imageByte = ipfsUtil.retrieveFile(musics.get(i).getCid3());
       String base64Image = Base64.getEncoder().encodeToString(imageByte);
@@ -87,7 +82,7 @@ public class UploadServiceImpl implements UploadService{
   @Override
   public UploadMusicResponseDto uploadMusic(UploadMusicRequestDto dto)
       throws Exception {
-    long userId = getUserId();
+    long userId = this.userService.getUserId();
     User user = this.userRepository.findUserById(userId)
         .orElseThrow(() -> new NotFoundException(UserResponseMessage.SEARCH_USER_FAIL));
     if (user.getType() != Type.Producer){
@@ -159,12 +154,7 @@ public class UploadServiceImpl implements UploadService{
 
   @Override
   public UploadMetadataResponseDto uploadMetadata(UploadMetadataRequestDto dto) throws IOException {
-    long userId = getUserId();
-
-    User user = this.userRepository.findById(userId)
-        .orElseThrow(
-            () -> new NotFoundException(UserResponseMessage.SEARCH_USER_FAIL)
-        );
+    long userId = this.userService.getUserId();
     String imgCid = this.ipfsUtil.addImageFileOnIPFS(dto.getImage().getOriginalFilename(),
         dto.getImage().getBytes());
 
@@ -178,11 +168,7 @@ public class UploadServiceImpl implements UploadService{
 
   @Override
   public DeleteMusicResponseDto deleteMusic(long musicId) throws AuthException {
-    long userId = getUserId();
-    User user = this.userRepository.findById(userId)
-        .orElseThrow(
-            () -> new NotFoundException(UserResponseMessage.SEARCH_USER_FAIL)
-        );
+    long userId = this.userService.getUserId();
     Music music = this.musicRepository.findById(musicId)
         .orElseThrow(
             () -> new NotFoundException(MusicResponseMessage.SEARCH_MUSIC_INFO_FAIL)
@@ -201,16 +187,8 @@ public class UploadServiceImpl implements UploadService{
       throws IOException, NoSuchAlgorithmException {
     byte[] buffer = dto.getFile().getBytes();
     String sha1 = this.ipfsUtil.sha1Convert(buffer);
-    boolean isDuplicated = false;
-    if (this.musicRepository.existsBySha1(sha1)){
-      isDuplicated = true;
-    }
+    boolean isDuplicated = this.musicRepository.existsBySha1(sha1);
     return new CheckDuplicatedMusicResponseDto(isDuplicated);
-  }
-
-  private long getUserId(){
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    return Long.parseLong(authentication.getName());
   }
 
   @Transactional(readOnly = true)

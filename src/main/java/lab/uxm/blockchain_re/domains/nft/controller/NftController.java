@@ -1,9 +1,12 @@
 package lab.uxm.blockchain_re.domains.nft.controller;
 
+import jakarta.security.auth.message.AuthException;
 import jakarta.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import lab.uxm.blockchain_re.domains.nft.dto.request.CreateNFTRequestDto;
 import lab.uxm.blockchain_re.domains.nft.dto.response.HasMintedResponseDto;
+import lab.uxm.blockchain_re.domains.nft.entity.NFT;
 import lab.uxm.blockchain_re.domains.nft.message.NftResponseMessage;
 import lab.uxm.blockchain_re.domains.nft.service.NftService;
 import lab.uxm.blockchain_re.response.ResponseData;
@@ -55,40 +58,84 @@ public class NftController {
   public ResponseEntity retrieveNFTInfo(
       @PathVariable @Valid long id
   ){
-    return null;
+    NFT nft = this.nftService.retrieveNFTById(id);
+    return new ResponseEntity(
+        ResponseData.res(
+            HttpStatus.OK.value(),
+            NftResponseMessage.RETRIEVE_NFT_INFORMATION_SUCCESS,
+            nft
+        ),
+        HttpStatus.OK
+    );
   }
   @GetMapping("/")
   public ResponseEntity retrieveNFTList(
       @RequestParam(value = "musicId") @Valid long musicId
   ){
-    return null;
+    List<NFT> nfts = this.nftService.retrieveNFTList(musicId);
+    return new ResponseEntity(
+        ResponseData.res(
+            HttpStatus.OK.value(),
+            NftResponseMessage.RETRIEVE_NFT_LIST_SUCCESS,
+            nfts
+        ),
+        HttpStatus.OK
+    );
   }
 
   @PostMapping("/meta")
   public ResponseEntity uploadMetadata(
       @Valid long musicId
-  ){
-    return null;
+  ) throws AuthException, IOException {
+    return new ResponseEntity(
+        ResponseData.res(
+            HttpStatus.OK.value(),
+            NftResponseMessage.UPLOAD_NFT_METADATA_SUCCESS,
+            this.nftService.uploadMeta(musicId)
+        ),
+        HttpStatus.OK
+    );
   }
 
   @PostMapping("/create")
   public ResponseEntity createNFT(
       @Valid CreateNFTRequestDto dto
   ){
-    return null;
+    return new ResponseEntity(
+        ResponseData.res(
+            HttpStatus.OK.value(),
+            NftResponseMessage.CREATE_NFT_SUCCESS,
+            this.nftService.createNFT(dto)
+        ),
+        HttpStatus.OK
+    );
   }
   @PostMapping("/sell/{id}")
   public ResponseEntity registerNftSale(
       @PathVariable @Valid Long id,
       @Valid String txId
   ){
-    return null;
+    return new ResponseEntity(
+        ResponseData.res(
+            HttpStatus.OK.value(),
+            NftResponseMessage.REGISTER_NFT_SALE_SUCCESS,
+            this.registerNftSale(id, txId)
+        ),
+        HttpStatus.OK
+    );
   }
   @PostMapping("/purchase/{id}")
   public ResponseEntity purchaseNft(
       @PathVariable @Valid Long id,
       @Valid String txId
-  ){
-    return null;
+  ) throws AuthException, IOException {
+    return new ResponseEntity(
+        ResponseData.res(
+            HttpStatus.OK.value(),
+            NftResponseMessage.PURCHASE_NFT_SUCCESS,
+            this.nftService.purchaseNFT(id, txId)
+        ),
+        HttpStatus.OK
+    );
   }
 }

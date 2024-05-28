@@ -1,6 +1,8 @@
 package lab.uxm.blockchain_re.exception;
 
 import io.swagger.v3.oas.annotations.Hidden;
+import jakarta.security.auth.message.AuthException;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import lab.uxm.blockchain_re.error.ErrorResponseDto;
@@ -107,6 +109,27 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       WebRequest req
   ){
     log.error("비밀번호가 일치하지 않습니다.", ex);
+    return buildErrorResponse(ex, ex.getMessage(), HttpStatus.BAD_REQUEST, req);
+  }
+
+  @ExceptionHandler(AuthException.class)
+  @Hidden
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ResponseEntity<Object> handleAuthException(
+      AuthException ex,
+      WebRequest req
+  ){
+    log.error("권한이 없습니다.", ex);
+    return buildErrorResponse(ex, ex.getMessage(), HttpStatus.BAD_REQUEST, req);
+  }
+  @ExceptionHandler(IOException.class)
+  @Hidden
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ResponseEntity<Object> handleIOException(
+      IOException ex,
+      WebRequest req
+  ){
+    log.error("IPFS, Smart contract error" , ex);
     return buildErrorResponse(ex, ex.getMessage(), HttpStatus.BAD_REQUEST, req);
   }
 
